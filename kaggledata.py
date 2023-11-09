@@ -59,5 +59,40 @@ for name, model in models.items():
     accuracy = accuracy_score(y_test, predictions)
     print(f'{name} Accuracy: {accuracy:.2f}')
 
+logistic_model = LogisticRegression(C=1.0, random_state=42) 
+logistic_model.fit(X_train_vectorized, y_train)
+
+
+scaler = StandardScaler(with_mean=False)
+X_train_scaled = scaler.fit_transform(X_train_vectorized)
+X_test_scaled = scaler.transform(X_test_vectorized)
+
+logistic_model.fit(X_train_scaled, y_train)
+
+
+
+logistic_model = LogisticRegression(class_weight='balanced', random_state=42)
+logistic_model.fit(X_train_vectorized, y_train)
+
+
+logistic_predictions = logistic_model.predict(X_test_vectorized)
+
+logistic_accuracy = accuracy_score(y_test, logistic_predictions)
+print(f'Logistic Regression Accuracy: {logistic_accuracy:.2f}')
+
+print('Logistic Regression Classification Report:')
+print(classification_report(y_test, logistic_predictions))
+
+
+conf_matrix = confusion_matrix(y_test, logistic_predictions)
+
+# Confusion Matrix
+sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=['REAL', 'FAKE'], yticklabels=['REAL', 'FAKE'])
+plt.xlabel('Predicted')
+plt.ylabel('Result')
+plt.title('Confusion Matrix - Logistic Regression')
+plt.show()
+
+
 
 
